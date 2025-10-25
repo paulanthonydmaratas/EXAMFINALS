@@ -1,5 +1,6 @@
 import java.util.Random;
 import java.util.Scanner;
+
 public class FightingGame {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -33,19 +34,63 @@ public class FightingGame {
             // Battle loop
             while (enemy.hp > 0 && player.hp > 0) {
                 System.out.println("\nYour Turn!");
-                System.out.print("Choose your action (Attack, Defend, Use Item): ");
+                System.out.print("Choose your action (Attack, Defend, Use Item, Use Skill): ");
                 String action = scanner.nextLine().toLowerCase();
 
-                if (action.equals("attack")) {
-                    player.attack(enemy);
-                } else if (action.equals("defend")) {
-                    player.defend();
-                } else if (action.equals("use item")) {
-                    System.out.print("Choose item (Healing, Mana): ");
-                    String itemType = scanner.nextLine().toLowerCase();
-                    player.useItem(itemType);
-                } else {
-                    System.out.println("Invalid action. Please choose again.");
+                switch (action) {
+                    case "attack":
+                        player.attack(enemy);
+                        break;
+
+                    case "defend":
+                        player.defend();
+                        break;
+
+                    case "use item":
+                        System.out.print("Choose item (Healing, Mana): ");
+                        String itemType = scanner.nextLine().toLowerCase();
+                        player.useItem(itemType);
+                        break;
+
+                    case "use skill":
+                        if (player instanceof Mage) {
+                            Mage mage = (Mage) player;
+                            System.out.print("Choose skill (Fireball, Ice Block): ");
+                            String skill = scanner.nextLine().toLowerCase();
+
+                            switch (skill) {
+                                case "fireball":
+                                    mage.fireball(enemy);
+                                    break;
+                                case "ice block":
+                                    mage.iceBlock();
+                                    break;
+                                default:
+                                    System.out.println("Invalid skill!");
+                                    break;
+                            }
+                        } else if (player instanceof Warlock) {
+                            Warlock warlock = (Warlock) player;
+                            System.out.print("Choose skill (Dark Blast, Life Drain): ");
+                            String skill = scanner.nextLine().toLowerCase();
+
+                            switch (skill) {
+                                case "dark blast":
+                                    warlock.darkBlast(enemy);
+                                    break;
+                                case "life drain":
+                                    warlock.lifeDrain(enemy);
+                                    break;
+                                default:
+                                    System.out.println("Invalid skill!");
+                                    break;
+                            }
+                        }
+                        break;
+
+                    default:
+                        System.out.println("Invalid action. Please choose again.");
+                        break;
                 }
 
                 if (enemy.hp > 0) {
